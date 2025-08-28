@@ -1,0 +1,152 @@
+:root {
+    --bg: #030303;
+    --fg: #f17da9;
+  }
+  
+  * { box-sizing: border-box; }
+  
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+    overflow: hidden;
+  }
+  
+  /* Utility to toggle visibility */
+  .hidden { display: none !important; }
+  
+  /* Full-screen stage (Part 1) */
+  #app {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+  
+    /* Center message */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Main message (center) */
+  #message {
+    position: relative;
+    z-index: 3;               /* above effects */
+    text-align: center;
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: 0.5px;
+    font-size: clamp(2rem, 6vw, 4.5rem);
+  
+    opacity: 0;
+    transition: opacity 800ms ease-in-out;
+  }
+  #message.show { opacity: 1; }
+  #message.hide { opacity: 0; }
+  
+  /* Hearts layer */
+  #hearts-container {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 2;
+  }
+  .heart {
+    position: absolute;
+    bottom: -20px;
+    color: #ff5577;
+    text-shadow: 0 2px 8px rgba(255, 85, 119, 0.5);
+    animation: floatUp 5s linear forwards;
+    will-change: transform, opacity;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(0) scale(1);   opacity: 1; }
+    100% { transform: translateY(-100vh) scale(1.6); opacity: 0; }
+  }
+  
+  /* Effects canvas covers the whole screen, under text */
+  #fx {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  /* PART 2 screen */
+  #game-intro {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    text-align: center;
+    background: var(--bg);
+  }
+  #game-intro h1 {
+    margin: 0 16px;
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 800;
+  }
+  #game-start-btn {
+    padding: 12px 22px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #0e0e12;
+    background: #ff6ea1;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.15s ease, filter 0.15s ease;
+  }
+  #game-start-btn:hover { transform: translateY(-2px); filter: brightness(1.05); }
+  #game-start-btn:active { transform: translateY(0); }
+  
+  /* Catch the Hearts: full-screen container */
+  #catch-game {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(1200px 800px at 50% 100%, rgba(255,255,255,0.25), rgba(255,255,255,0) 60%),
+                linear-gradient(180deg, #ffd1dc 0%, #ffafbd 35%, #ffc3a0 100%);
+  }
+  
+  /* Game canvas fills screen (HiDPI handled in JS) */
+  #gameCanvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  
+  /* HUD */
+  #hud {
+    position: fixed;
+    top: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.65);
+    color: #222;
+    box-shadow: 0 6px 30px rgba(0,0,0,0.15);
+    user-select: none;
+  }
+  #hud .hint { font-weight: 600; opacity: 0.85; }
+  
+  /* Reduce motion */
+  @media (prefers-reduced-motion: reduce) {
+    #message { transition: none; }
+    .heart { animation: none; opacity: 0.7; }
+  }
+  
